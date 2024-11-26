@@ -1,6 +1,9 @@
 #ifndef ADD_H
 #define ADD_H
-
+struct sample{
+  int sample1;
+  int sample2;
+};
 int add(int a, int b);
 
 #endif // ADD_H
