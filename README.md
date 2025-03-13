@@ -128,23 +128,17 @@ Generate Coverage Report
    |
    v
 End
-### Prerequisites
+```
+### Usage
 
-- Python 3.x
-- `cffi` library (`pip install cffi`)
-- `gcov` and `lcov` for coverage reporting
-- Git for repository cloning
 
-### Step-by-Step Guide
-
-1. **Clone the Repository**: Clone the repository containing the C code you wish to test.
-
-2. **Configure `pytest.ini`**: Update the `pytest.ini` file with the appropriate Git repository URL and the names of the C and header files to be tested.
+2. **Configure `pytest.ini`**: Set Parameters in pytest.ini i.e `git_repo_url`,`c_file`,`h_file`.
 
 3. **Run the Script**: Execute the script to automate the testing process.
+4. **Note** : *Execute this script from root level of ETF*
 
 ```bash
-python automated_unit_test_ETF.py
+make unittest
 ```
 ## References
 
