@@ -134,12 +134,12 @@ End
 
 2. **Configure `pytest.ini`**: Set Parameters in pytest.ini i.e `git_repo_url`,`c_file`,`h_file`.
 
-3. **Run the Script**: Execute the script to automate the testing process.
-4. **Note** : *Execute this script from root level of ETF*
 
+3. **Run the Script**: Execute the script to automate the testing process.
 ```bash
 make unittest
 ```
+4. **Note** : *Execute this script from root level of ETF*
 ## References
 
 - [Python CFFI Documentation](https://cffi.readthedocs.io/en/latest/)
