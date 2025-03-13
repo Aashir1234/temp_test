@@ -147,5 +147,3 @@ make unittest
 - [Lcov Documentation](https://linux.die.net/man/1/lcov)
 
 ---
-
-This documentation provides a detailed overview of the automated unit testing process for C code using Python. It is designed to be accessible to beginners while providing the necessary depth for more experienced developers.
