@@ -2,21 +2,13 @@
 
 ## Overview
 
-This project provides a robust and automated solution for unit testing C code using Python. The primary goal is to streamline the process of testing C functions by leveraging Python's `cffi` (C Foreign Function Interface) library. The script automates the extraction of C and header files from a Git repository, parses the content, generates unit test cases, and produces a coverage report to ensure comprehensive testing.
-
-## Key Features
-
-- **Automated Extraction**: Extracts C and header files from a specified Git repository.
-- **Dynamic Test Generation**: Generates unit test cases dynamically based on the extracted C code.
-- **Coverage Reporting**: Produces a detailed coverage report to identify untested code.
-- **Logging**: Provides detailed logging for each step of the process, ensuring transparency and ease of debugging.
-- **Configuration Management**: Uses a `pytest.ini` file to manage configuration settings, such as the Git repository URL and specific C files to test.
+This script provides a robust and automated solution for unit testing C code using Python. The primary goal is to streamline the process of testing C functions by leveraging Python's `cffi` (C Foreign Function Interface) library. The script automates the extraction of C and header files from a Git repository, parses the content, generates unit testing enviroment, and produces a coverage report to ensure comprehensive testing.
 
 ## Methodology
 
 ### 1. **Configuration and Initialization**
 
-The script begins by reading configuration settings from a `pytest.ini` file. This file contains essential parameters such as the Git repository URL and the specific C and header files to be tested.
+The script begins by reading configuration settings from  `pytest.ini`. This file contains essential parameters such as the Git repository URL and the specific C and header files to be tested.
 
 ```ini
 [pytest]
@@ -29,24 +21,9 @@ unittest_header_file = example.h
 
 The script validates the Git repository URL and clones the repository into a designated directory. It also ensures a clean testing environment by removing any previously cloned repositories and temporary files.
 
-```python
-def validate_url_git(url):
-    if url.startswith("https://github.com/") or url.startswith("git@github.com:"):
-        return True
-    else:
-        return False
-
-def process_url_git(url):
-    if validate_url_git(url):
-        subprocess.run(["git", "clone", url], check=True)
-
-def clean_repo_git():
-    shutil.rmtree("cloned_repository")
-```
-
 ### 3. **File Extraction and Parsing**
 
-The script extracts all C and header files from the cloned repository. It then parses the content of these files to extract function declarations, structs, enums, and preprocessor directives.
+The script extracts all C and header files from all levels of the cloned repository. It then parses the content of these files to extract function declarations, structs, enums, and preprocessor directives.
 
 ```python
 def extract_c_and_h_files():
@@ -65,7 +42,7 @@ def parse_content():
 
 ### 4. **Test Case Generation**
 
-Using a predefined template, the script generates unit test cases. The template is populated with the parsed content, including function declarations and implementations.
+Using a predefined template, the script generates unit testing enviroment. The template is populated with the parsed content, including function declarations and implementations.
 
 ```python
 def create_test_file(template, header_content, c_content):
@@ -81,15 +58,76 @@ def create_test_file(template, header_content, c_content):
 
 The generated test cases are executed using Python's `unittest` framework. After execution, a coverage report is generated using `gcov` and `lcov`.
 
+5. **Analyze Coverage Report**: The coverage report will be generated in the `coverage_report` directory. Open the `index.html` file in a web browser to view the detailed coverage report.
 ```python
 def create_coverage_file(template):
     subprocess.run(['gcov', '_mul.c'], check=True)
     subprocess.run(['lcov', '--capture', '--directory', '.', '--output-file', 'coverage.info'], check=True)
     subprocess.run(['genhtml', 'coverage.info', '--output-directory', 'coverage_report'], check=True)
 ```
+## Detailed Flowchart
 
-## Usage
-
+```plaintext
+Start
+   |
+   v
+Read Configuration from pytest.ini
+   |-> git_repo_url
+   |-> unittest_c_file
+   |-> unittest_header_file
+   |
+   v
+Validate Git Repository URL
+   |-> Check if URL starts with "https://github.com/" or "git@github.com:"
+   |-> If valid -> Proceed
+   |-> If invalid -> Log error and exit
+   |
+   v
+Clean Previous Test Environment
+   |-> Delete cloned repository directory
+   |-> Remove temporary files (*.so, *.o, *.gcda, etc.)
+   |
+   v
+Clone Git Repository
+   |-> Clone repository into "cloned_repository" directory
+   |-> Log success or failure
+   |
+   v
+Extract C and Header Files
+   |-> Recursively search for *.c and *.h files
+   |-> Log number of files found
+   |
+   v
+Parse C and Header Files
+   |-> Extract function declarations
+   |-> Extract structs and enums
+   |-> Extract preprocessor directives
+   |-> Log parsed content
+   |
+   v
+Generate Unit Test Cases
+   |-> Use unittest_testcase.template
+   |-> Replace placeholders with parsed content
+   |-> Save generated test file (e.g., test_example.py)
+   |
+   v
+Compile C Code Using CFFI
+   |-> Use CFFI to compile C code into a shared library
+   |-> Log compilation success or failure
+   |
+   v
+Execute Unit Tests
+   |-> Run generated test cases using unittest framework
+   |-> Log test results
+   |
+   v
+Generate Coverage Report
+   |-> Use gcov and lcov to generate coverage data
+   |-> Create HTML coverage report in "coverage_report" directory
+   |-> Log coverage report generation status
+   |
+   v
+End
 ### Prerequisites
 
 - Python 3.x
@@ -108,21 +146,6 @@ def create_coverage_file(template):
 ```bash
 python automated_unit_test_ETF.py
 ```
-
-4. **Review Test Results**: The script will generate unit test cases and execute them. Review the test results in the console output.
-
-5. **Analyze Coverage Report**: The coverage report will be generated in the `coverage_report` directory. Open the `index.html` file in a web browser to view the detailed coverage report.
-
-## Conclusion
-
-This automated unit testing script provides a comprehensive solution for testing C code using Python. By automating the extraction, parsing, and test generation processes, it significantly reduces the manual effort required for unit testing. The inclusion of coverage reporting ensures that all code paths are tested, leading to more robust and reliable software.
-
-## Future Enhancements
-
-- **Support for Multiple Files**: Extend the script to handle multiple C and header files simultaneously.
-- **Integration with CI/CD**: Integrate the script with continuous integration/continuous deployment pipelines for automated testing in development workflows.
-- **Enhanced Error Handling**: Improve error handling and logging for better debugging and user experience.
-
 ## References
 
 - [Python CFFI Documentation](https://cffi.readthedocs.io/en/latest/)
